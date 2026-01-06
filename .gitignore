@@ -1,0 +1,19 @@
+# Gradle files
+.gradle/
+build/
+out/
+gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA / Eclipse
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Logs
+*.log
