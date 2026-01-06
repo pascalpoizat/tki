@@ -77,6 +77,20 @@ cd tki
 ./tki "Researcher Name"
 ```
 
+## ⚖️ License & Legal
+
+This project is distributed under the **Apache License 2.0**. See the `LICENSE` file for details.
+
+Third-Party Dependencies
+
+This "Fat Jar" distribution includes the following open-source libraries:
+
+- **[Picocli](https://picocli.info)** (Apache License 2.0), _version 4.7.5_
+
+- **[Jsoup](https://jsoup.org)** (MIT License), _version 1.17.2_
+
+We thank the authors of these libraries for their work.
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
