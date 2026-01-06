@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Nom du fichier JAR généré par Gradle (par défaut 'app-1.0.0.jar' dans ce type de projet)
+JAR_NAME="app-1.0.0.jar"
+
+# On cherche le jar dans le même dossier que ce script (cas production)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+JAR_PATH="$DIR/$JAR_NAME"
+
+# Vérification et Auto-build (cas développement)
+if [ ! -f "$JAR_PATH" ]; then
+    # Le projet est dans un sous-dossier 'app', donc le build aussi
+    DEV_JAR_PATH="$DIR/app/build/libs/$JAR_NAME"
+    
+    # Si le jar n'existe pas dans app/build/libs
+    if [ ! -f "$DEV_JAR_PATH" ]; then
+        # Si le wrapper Gradle existe, on tente de construire le projet
+        if [ -f "$DIR/gradlew" ]; then
+            echo "🔨 Jar non trouvé. Lancement de la compilation..."
+            "$DIR/gradlew" jar
+        fi
+    fi
+    
+    # On assigne le chemin dev si le fichier existe maintenant
+    if [ -f "$DEV_JAR_PATH" ]; then
+        JAR_PATH="$DEV_JAR_PATH"
+    fi
+fi
+
+# Ultime vérification
+if [ ! -f "$JAR_PATH" ]; then
+    echo "❌ Erreur : Impossible de trouver $JAR_NAME"
+    echo "Chemin cherché : $JAR_PATH"
+    echo "Vérifiez que la compilation s'est bien passée ('./gradlew jar')."
+    exit 1
+fi
+
+# Lancement de l'application en passant tous les arguments ($@)
+java -jar "$JAR_PATH" "$@"

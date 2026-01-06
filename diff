@@ -1,0 +1,44 @@
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+index 799ba4d..b011648 100644
+--- a/app/build.gradle.kts
++++ b/app/build.gradle.kts
+@@ -11,16 +11,12 @@ repositories {
+ }
+ 
+ dependencies {
+-    // Picocli pour gérer les arguments de la ligne de commande (CLI)
+     implementation("info.picocli:picocli:4.7.5")
+     annotationProcessor("info.picocli:picocli-codegen:4.7.5")
+-
+-    // Jsoup pour le scraping HTML (récupérer les infos sur Google Scholar)
+     implementation("org.jsoup:jsoup:1.17.2")
+ }
+ 
+ application {
+-    // Classe principale qui sera exécutée
+     mainClass.set("com.tki.TkiApp")
+ }
+ 
+@@ -28,4 +24,21 @@ java {
+     toolchain {
+         languageVersion.set(JavaLanguageVersion.of(21))
+     }
++}
++
++// Configuration pour créer un "Fat Jar" (inclus les dépendances)
++tasks.jar {
++    manifest {
++        attributes["Main-Class"] = "com.tki.TkiApp"
++    }
++    // On prend les sources compilées du projet
++    from(sourceSets.main.get().output)
++    
++    // On ajoute toutes les dépendances décompressées (zipTree)
++    from({
++        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
++    })
++    
++    // Stratégie en cas de fichiers en doublon dans les libs (ex: LICENSE, META-INF)
++    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+ }
+\ No newline at end of file
